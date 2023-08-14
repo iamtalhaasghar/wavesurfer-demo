@@ -1,0 +1,44 @@
+<div id="waveform">
+  <!-- the waveform will be rendered here -->
+</div>
+
+<div id="controls">
+  <button id="playPauseButton">Play / Pause</button>  
+  <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+</div>
+
+<script type="module">
+import WaveSurfer from 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js'
+
+const audioTag = document.querySelector('audio');
+const audioUrl = 'sample-3s.mp3';
+
+const wavesurfer = WaveSurfer.create({
+  container: '#waveform',
+  waveColor: '#4F4A85',
+  progressColor: '#383351',
+  url: audioUrl,
+});
+
+wavesurfer.on('interaction', () => {
+  wavesurfer.play();
+});
+
+document.getElementById('playPauseButton').addEventListener('click', () => {
+  if (wavesurfer.isPlaying()) {
+    wavesurfer.pause();
+  } else {
+    wavesurfer.play();
+  }
+});
+
+const volumeSlider = document.getElementById('volumeSlider');
+volumeSlider.addEventListener('input', () => {
+  const volume = parseFloat(volumeSlider.value);
+  wavesurfer.setVolume(volume);
+});
+
+function updateVolumeSlider() {
+  volumeSlider.value = wavesurfer.getVolume();
+}
+</script>
